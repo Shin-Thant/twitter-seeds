@@ -12,12 +12,17 @@ export async function createPostTweets(db: Db) {
 	const data: PostTweet[] = [];
 
 	users.forEach((user) => {
+		const date = faker.date.recent();
+
 		const temp: PostTweet = {
 			type: "post",
-			body: faker.lorem.lines({ min: 3, max: 5 }),
+			body: faker.lorem.paragraph({ min: 3, max: 5 }),
 			owner: user._id,
+			images: [],
 			likes: [],
 			shares: [],
+			createdAt: date.toISOString(),
+			updatedAt: date.toISOString(),
 		};
 		data.push(temp);
 	});
@@ -45,6 +50,8 @@ export async function createShareTweets(db: Db) {
 	const data: ShareTweet[] = [];
 
 	for (let i = 0; i < SHARES_COUNT; i++) {
+		const date = faker.date.recent();
+
 		const temp: ShareTweet = {
 			type: "share",
 			body: faker.lorem.lines({ min: 3, max: 5 }),
@@ -52,6 +59,8 @@ export async function createShareTweets(db: Db) {
 			origin: tweets[i]._id,
 			likes: [],
 			shares: [],
+			createdAt: date.toISOString(),
+			updatedAt: date.toISOString(),
 		};
 		data.push(temp);
 	}

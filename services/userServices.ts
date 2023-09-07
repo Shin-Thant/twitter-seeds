@@ -4,20 +4,30 @@ import { faker } from "@faker-js/faker";
 import { USERS_COUNT } from "../config";
 import bcrypt from "bcrypt";
 
-const getMe = () => ({
-	username: "Shin_Thant",
-	name: "Shin Thant",
-	email: "shin@test.com",
-	password: "password123",
-	createdAt: new Date().toISOString(),
-	updatedAt: new Date().toISOString(),
-});
+const getMe = async () => {
+	const pwd = await bcrypt.hash('password123', 10);
+
+	return {
+		username: "Shin_Thant",
+		name: "Shin Thant",
+		email: "shin@test.com",
+		password: pwd,
+		createdAt: new Date().toISOString(),
+		updatedAt: new Date().toISOString(),
+		avatar: '',
+		counts: {
+			followers: 0,
+			following: 0,
+		},
+		following: [],
+	}
+};
 
 export async function createUsers(db: Db) {
 	const data: User[] = [];
-	const hashedPwd = await bcrypt.hash("password123", 10);
+	const hashedPwd = await bcrypt.hash('password123', 10);
 
-	data.push(getMe());
+	data.push(await getMe());
 
 	for (let i = 0; i < USERS_COUNT; i++) {
 		const firstName = faker.person.firstName();
@@ -30,6 +40,11 @@ export async function createUsers(db: Db) {
 			email: faker.internet.email({ firstName, lastName }),
 			password: hashedPwd,
 			avatar: "",
+			following: [],
+			counts: {
+				followers: 0,
+				following: 0
+			},
 			createdAt: date.toISOString(),
 			updatedAt: date.toISOString(),
 		};
