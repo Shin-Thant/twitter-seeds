@@ -11,7 +11,7 @@ const getMe = async () => {
 		username: "Shin_Thant",
 		name: "Shin Thant",
 		email: "shin@test.com",
-		emailVerified: false,
+		emailVerified: true,
 		password: pwd,
 		createdAt: new Date().toISOString(),
 		updatedAt: new Date().toISOString(),
