@@ -5,7 +5,7 @@ import { USERS_COUNT } from "../config";
 import bcrypt from "bcrypt";
 
 const getMe = async () => {
-	const pwd = await bcrypt.hash('password123', 10);
+	const pwd = await bcrypt.hash("password123", 10);
 
 	return {
 		username: "Shin_Thant",
@@ -15,18 +15,18 @@ const getMe = async () => {
 		password: pwd,
 		createdAt: new Date().toISOString(),
 		updatedAt: new Date().toISOString(),
-		avatar: '',
+		avatar: "",
 		counts: {
 			followers: 0,
 			following: 0,
 		},
 		following: [],
-	}
+	};
 };
 
 export async function createUsers(db: Db) {
 	const data: User[] = [];
-	const hashedPwd = await bcrypt.hash('password123', 10);
+	const hashedPwd = await bcrypt.hash("password123", 10);
 
 	data.push(await getMe());
 
@@ -45,7 +45,7 @@ export async function createUsers(db: Db) {
 			following: [],
 			counts: {
 				followers: 0,
-				following: 0
+				following: 0,
 			},
 			createdAt: date.toISOString(),
 			updatedAt: date.toISOString(),
@@ -56,4 +56,11 @@ export async function createUsers(db: Db) {
 
 	const result = await db.collection("users").insertMany(data);
 	console.log({ user_creation: result });
+}
+
+export async function getRandomUsers({ db, count }: { db: Db; count: number }) {
+	return await db
+		.collection("users")
+		.aggregate([{ $sample: { size: count } }])
+		.toArray();
 }

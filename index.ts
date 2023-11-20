@@ -5,6 +5,7 @@ import { Db, MongoClient } from "mongodb";
 import { DB_URL } from "./config";
 import { createPostTweets, createShareTweets } from "./services/tweetServices";
 import { createUsers } from "./services/userServices";
+import { createComments } from "./services/commentServices";
 
 async function connectDB() {
 	try {
@@ -35,10 +36,11 @@ connectDB().then(async (db) => {
 		await createUsers(db);
 		await createPostTweets(db);
 		await createShareTweets(db);
+		await createComments(db);
 
 		process.exit();
 	} catch (err) {
-		console.log(err);
+		console.log({ err });
 		process.exit();
 	}
 });

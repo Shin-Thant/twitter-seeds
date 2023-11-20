@@ -21,6 +21,7 @@ export async function createPostTweets(db: Db) {
 			images: [],
 			likes: [],
 			shares: [],
+      commentCount: 0,
 			createdAt: date.toISOString(),
 			updatedAt: date.toISOString(),
 		};
@@ -59,6 +60,7 @@ export async function createShareTweets(db: Db) {
 			origin: tweets[i]._id,
 			likes: [],
 			shares: [],
+      commentCount: 0,
 			createdAt: date.toISOString(),
 			updatedAt: date.toISOString(),
 		};
@@ -67,4 +69,17 @@ export async function createShareTweets(db: Db) {
 
 	const result = await db.collection("tweets").insertMany(data);
 	console.log({ shares_creation: result });
+}
+
+export async function getRandomTweets({
+	db,
+	count,
+}: {
+	db: Db;
+	count: number;
+}) {
+	return await db
+		.collection("tweets")
+		.aggregate([{ $sample: { size: count } }])
+		.toArray();
 }
